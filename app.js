@@ -56,7 +56,10 @@ function postToDiscord(message) {
 }
 
 require('http').createServer(function(req, res) {
-    if(req.url == "/sync" && req.method == "GET") {
+    if(req.url == "/" && req.method == "GET") {
+        res.writeHead(200, { "Content-Type" : "text/plain" });
+        res.end("OK");
+    } else if(req.url == "/sync" && req.method == "GET") {
         clearSchedule();
         saveScheduleFromSheets(setSchedule);
         res.writeHead(200, { "Content-Type" : "text/plain" });

@@ -1,3 +1,4 @@
+var fs = require('fs');
 var https = require('https');
 var scheduler = require('node-schedule');
 var schedule = {};
@@ -67,6 +68,22 @@ require('http').createServer(function(req, res) {
     } else if(req.url == "/schedule" && req.method == "GET") {
         res.writeHead(200, { "Content-Type" : "text/plain" });
         res.end(JSON.stringify(schedule, null, "\t"));
+    } else if(req.url == "/send" && req.method == "GET") {
+    	fs.readFile('send.html', (err, data) => {
+    		if(err) throw err;
+    		res.writeHead(200, { "Content-Type" : "text/html" });
+        	res.end(data);
+    	})
+    } else if(req.url == "/sendMessage" && req.method == "POST") {
+    	var body = '';
+        req.on('data', function(data) {
+            body += data;
+        });
+        req.on('end', function() {
+            postToDiscord(body.toString());
+	        res.writeHead(200, { "Content-Type" : "text/plain" });
+	        res.end("Sent.");
+        });
     } else {
         res.writeHead(404, { "Content-Type" : "text/plain" });
         res.end("404");

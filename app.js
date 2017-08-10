@@ -44,7 +44,7 @@ function postToDiscord(message) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Content-Length': content.length
+            'Content-Length': Buffer.byteLength(content, 'utf-8')
         }
     };
     var post = https.request(options, function(res) {
